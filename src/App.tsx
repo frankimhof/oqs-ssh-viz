@@ -9,7 +9,11 @@ function App() {
   const [useFilter, setShowFilter] = useState(false);
   const [selectedKems, setSelectedKems] = useState<string[]>([]);
   const [selectedSigs, setSelectedSigs] = useState<string[]>([]);
-  //const data:DataEntry[] = dataJSON.map((d:any)=>d as DataEntry);
+
+  const filteredData = data.filter(d=>selectedSigs.includes(d.sigName) && selectedKems.includes(d.kemName)) 
+  const allAvailableKems = Array.from(new Set(data.map(d => d.kemName)))
+  const allAvailableSigs = Array.from(new Set(data.map(d => d.sigName)))
+
   useEffect(()=>{
     const fetchData = async () =>{
       const response = await fetch('data.json');
@@ -33,17 +37,13 @@ function App() {
 
   const handleSigFilterChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
     setSelectedSigs(selectedOptions.map(d=>d.value))
-    console.log("HANDLE SIGS")
   }
 
   const handleKemFilterChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
     setSelectedKems(selectedOptions.map(d=>d.value))
-    console.log("HANDLE KEMS")
   }
 
-  const allAvailableSigs:string[]=Array.from(new Set(data.map(d => d.sigName)))
-  const allAvailableKems:string[]=Array.from(new Set(data.map(d => d.kemName)))
-  const filteredData = data.filter(d=>selectedSigs.includes(d.sigName) && selectedKems.includes(d.kemName)) 
+  
 
   return (
     <div className="App">
@@ -54,13 +54,15 @@ function App() {
       </header>
         <button onClick={handleUseFilter}>{useFilter? "Disable Filter":"Enable Filter"}</button>
       {useFilter && 
-      <div>
+      <div style={{padding: "20px", backgroundColor: "#eee"}}>
+        <h4>Select from available SIGs</h4>
         <Select onChange={handleSigFilterChange} options={allAvailableSigs.map(sig=>({value: sig, label: sig}))} isMulti/>
+        <h4>Select from available KEMs</h4>
         <Select onChange={handleKemFilterChange} options={allAvailableKems.map(kem=>({value: kem, label: kem}))} isMulti/>
       </div>
       }
       <div className="App-body">
-        <Plot data={filteredData}></Plot>
+        <Plot xAccessor={(d:DataEntry):string=>d.kemName} yAccessors={[(d:DataEntry):number=>d.hsTimeMedian, (d:DataEntry):number=>d.hsTime95th]} data={useFilter? filteredData:data}></Plot>
       </div>
   </div>
   );
