@@ -1,0 +1,172 @@
+[
+    {
+        "kemName": "curve25519-sha256",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6265587399999788",
+        "authTimeMedian": "1.0104349389999925",
+        "hsTimeMedian": "1.6370775270000024",
+        "kemTime95th": "0.6315819000000147",
+        "authTime95th": "1.0235557629999903",
+        "hsTime95th": "1.6627430780000019"
+    },
+    {
+        "kemName": "ecdh-nistp384-saber-lightsaber",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6267464879999949",
+        "authTimeMedian": "1.01108540000007",
+        "hsTimeMedian": "1.637620394999999",
+        "kemTime95th": "0.6308709290000252",
+        "authTime95th": "1.0181838099999823",
+        "hsTime95th": "1.6505874300000016"
+    },
+    {
+        "kemName": "ecdh-nistp384-saber-saber",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6267129990000058",
+        "authTimeMedian": "1.0108112429999778",
+        "hsTimeMedian": "1.6374602260000302",
+        "kemTime95th": "0.6302333429999862",
+        "authTime95th": "1.0152845929999899",
+        "hsTime95th": "1.6450460380000038"
+    },
+    {
+        "kemName": "ecdh-nistp384-saber-firesaber",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6264481599999954",
+        "authTimeMedian": "1.011396891000004",
+        "hsTimeMedian": "1.638200973000039",
+        "kemTime95th": "0.6298179890000029",
+        "authTime95th": "1.0288193559999996",
+        "hsTime95th": "1.6556710990000028"
+    },
+    {
+        "kemName": "ntru-hps-2048-509",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6136122550000209",
+        "authTimeMedian": "1.0112422260000073",
+        "hsTimeMedian": "1.6247997439999153",
+        "kemTime95th": "0.6163062230000378",
+        "authTime95th": "1.0170481230000519",
+        "hsTime95th": "1.6312312179999253"
+    },
+    {
+        "kemName": "ntru-hps-2048-677",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6155434199999945",
+        "authTimeMedian": "1.0095885380000027",
+        "hsTimeMedian": "1.6251197330000196",
+        "kemTime95th": "0.6192621730000099",
+        "authTime95th": "1.0147526069999913",
+        "hsTime95th": "1.6326558139999747"
+    },
+    {
+        "kemName": "ecdh-nistp384-ntru-hps-2048-509",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.628539915000033",
+        "authTimeMedian": "1.0105826859999922",
+        "hsTimeMedian": "1.6392681510000102",
+        "kemTime95th": "0.6318162490000532",
+        "authTime95th": "1.0130669600000033",
+        "hsTime95th": "1.643418908000001"
+    },
+    {
+        "kemName": "ecdh-nistp384-ntru-hps-2048-677",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6305498799999896",
+        "authTimeMedian": "1.0098041089999867",
+        "hsTimeMedian": "1.640203363000012",
+        "kemTime95th": "0.633509164000003",
+        "authTime95th": "1.0127738150000027",
+        "hsTime95th": "1.6454467580000482"
+    },
+    {
+        "kemName": "kyber-512",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.611409545000015",
+        "authTimeMedian": "1.0103667559999963",
+        "hsTimeMedian": "1.6218147450000515",
+        "kemTime95th": "0.6154066469999862",
+        "authTime95th": "1.0168261569999686",
+        "hsTime95th": "1.6296328799999884"
+    },
+    {
+        "kemName": "kyber-768",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6117273250000039",
+        "authTimeMedian": "1.0103726990000155",
+        "hsTimeMedian": "1.6222731510000017",
+        "kemTime95th": "0.6155515860000378",
+        "authTime95th": "1.0235407410000334",
+        "hsTime95th": "1.7981384620001108"
+    },
+    {
+        "kemName": "kyber-1024",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6109908189999942",
+        "authTimeMedian": "1.0101844659999983",
+        "hsTimeMedian": "1.6211747250000599",
+        "kemTime95th": "0.6140849850000052",
+        "authTime95th": "1.028234552000015",
+        "hsTime95th": "1.6372693149999975"
+    },
+    {
+        "kemName": "ecdh-nistp384-kyber-512",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6262914290000197",
+        "authTimeMedian": "1.011360703",
+        "hsTimeMedian": "1.6376901390000285",
+        "kemTime95th": "0.6315628639999886",
+        "authTime95th": "1.015848143000028",
+        "hsTime95th": "1.6471750210000664"
+    },
+    {
+        "kemName": "ecdh-nistp384-kyber-768",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6265804630000105",
+        "authTimeMedian": "1.010937063999961",
+        "hsTimeMedian": "1.6372736980000013",
+        "kemTime95th": "0.6301536789999886",
+        "authTime95th": "1.020080164000035",
+        "hsTime95th": "1.6495063680000044"
+    },
+    {
+        "kemName": "ecdh-nistp384-kyber-1024",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6263238699999647",
+        "authTimeMedian": "1.0129248229999916",
+        "hsTimeMedian": "1.6409768519999943",
+        "kemTime95th": "0.630881488",
+        "authTime95th": "1.0318465449999934",
+        "hsTime95th": "1.6584717579999904"
+    },
+    {
+        "kemName": "saber-lightsaber",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.610924816999983",
+        "authTimeMedian": "1.0106023069999992",
+        "hsTimeMedian": "1.621652026999982",
+        "kemTime95th": "0.614325104000045",
+        "authTime95th": "1.0170512919999624",
+        "hsTime95th": "1.6307922790000475"
+    },
+    {
+        "kemName": "saber-saber",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6114704189999998",
+        "authTimeMedian": "1.010101447000011",
+        "hsTimeMedian": "1.6215527719999727",
+        "kemTime95th": "0.6142423630000167",
+        "authTime95th": "1.0139544910000495",
+        "hsTime95th": "1.6274713500000075"
+    },
+    {
+        "kemName": "saber-firesaber",
+        "sigName": "ssh-ed25519",
+        "kemTimeMedian": "0.6119927950000061",
+        "authTimeMedian": "1.0096295170000076",
+        "hsTimeMedian": "1.621715657999971",
+        "kemTime95th": "0.6147716959999343",
+        "authTime95th": "1.0163962780000002",
+        "hsTime95th": "1.6294010899999876"
+    }
+]
