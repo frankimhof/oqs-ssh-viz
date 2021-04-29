@@ -1,18 +1,60 @@
-import React, {useState, useEffect, Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import Select, {OptionsType} from 'react-select';
+import * as d3 from 'd3';
 import './App.css';
-import Plot from './Plot';
-import {DataEntry} from './customTypes';
+import BarPlot from './BarPlot';
+import {DataEntry, LegendItem} from './customTypes';
 
 function App() {
   const [data, setData] = useState<DataEntry[]>([]);
-  const [useFilter, setShowFilter] = useState(false);
+  const [barSpacing, setBarSpacing] = useState<number>(2);
+  const [barGroupSpacing, setBarGroupSpacing] = useState<number>(20);
+  const [showSettings, setShowSettings] = useState(false);
   const [selectedKems, setSelectedKems] = useState<string[]>([]);
   const [selectedSigs, setSelectedSigs] = useState<string[]>([]);
-
-  const filteredData = data.filter(d=>selectedSigs.includes(d.sigName) && selectedKems.includes(d.kemName)) 
   const allAvailableKems = Array.from(new Set(data.map(d => d.kemName)))
   const allAvailableSigs = Array.from(new Set(data.map(d => d.sigName)))
+  const [filteredData, setFilteredData] = useState<DataEntry[]>([]);
+  const allAvailableValueAccessors = [
+    {
+      label:"HandshakeTimeMedian",
+      accessor: (d:DataEntry)=>d.hsTimeMedian,
+      color: "#648fff",
+      pattern: ""
+    },
+    {
+      label:"HandshakeTime95thPercentile",
+      accessor: (d:DataEntry)=>d.hsTime95th,
+      color: d3.rgb("#648fff").brighter(1).toString(),
+      pattern: "diagonal-lines"
+    },
+    {
+      label:"AuthTimeMedian",
+      accessor: (d:DataEntry)=>d.authTimeMedian,
+      color: "#dc267f",
+      pattern: ""
+    },
+    {
+      label:"AuthTime95thPercentile",
+      accessor: (d:DataEntry)=>d.authTime95th,
+      color: d3.rgb("#dc267f").brighter(2).toString(),
+      pattern: "checkered"
+    },
+    {
+      label:"KemTimeMedian",
+      accessor: (d:DataEntry)=>d.kemTimeMedian,
+      color: "#ffb002",
+      pattern: ""
+    },
+    {
+      label:"KemTime95thPercentile",
+      accessor: (d:DataEntry)=>d.kemTime95th,
+      color: d3.rgb("#ffb002").brighter(0.8).toString(),
+      pattern: "circles"
+    },
+  ];
+
+  const [selectedValueAccessors, setSelectedValueAccessors] = useState<{label: string, accessor: (d:DataEntry)=>number, color: string, pattern: string}[]>(allAvailableValueAccessors);
 
   useEffect(()=>{
     const fetchData = async () =>{
@@ -23,17 +65,25 @@ function App() {
     fetchData();
   },[])
 
-  const handleUseFilter = () =>{
-    if(useFilter){
-      setSelectedKems(allAvailableKems);
-      setSelectedSigs(allAvailableSigs);
-    }
-    else{
-      setSelectedKems([]);
-      setSelectedSigs([]);
-    }
-    setShowFilter(!useFilter);
-  };
+  useEffect(()=>{
+    setSelectedKems(Array.from(new Set(data.map(d => d.kemName))));
+    setSelectedSigs(Array.from(new Set(data.map(d => d.sigName))));
+  },[data])
+
+  useEffect(()=>{
+    setFilteredData(data.filter(d=>selectedSigs.includes(d.sigName) && selectedKems.includes(d.kemName)));
+  }, [data, selectedKems, selectedSigs])
+  //  const handleShowSettings = () =>{
+  //    if(showSettings){
+  //      setSelectedKems(allAvailableKems);
+  //      setSelectedSigs(allAvailableSigs);
+  //    }
+  //    else{
+  //      setSelectedKems([]);
+  //      setSelectedSigs([]);
+  //    }
+  //    setShowSettings(!showSettings);
+  //  };
 
   const handleSigFilterChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
     setSelectedSigs(selectedOptions.map(d=>d.value))
@@ -42,27 +92,43 @@ function App() {
   const handleKemFilterChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
     setSelectedKems(selectedOptions.map(d=>d.value))
   }
+  const handleValueAccessorChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
+    const selectedLabels = selectedOptions.map(o=>o.label);
+    setSelectedValueAccessors(allAvailableValueAccessors.filter(d=>selectedLabels.includes(d.label)))
+  }
 
   
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-        Openssh Speed Test Results
-        </p>
       </header>
-        <button onClick={handleUseFilter}>{useFilter? "Disable Filter":"Enable Filter"}</button>
-      {useFilter && 
-      <div style={{padding: "20px", backgroundColor: "#eee"}}>
-        <h4>Select from available SIGs</h4>
-        <Select onChange={handleSigFilterChange} options={allAvailableSigs.map(sig=>({value: sig, label: sig}))} isMulti/>
-        <h4>Select from available KEMs</h4>
-        <Select onChange={handleKemFilterChange} options={allAvailableKems.map(kem=>({value: kem, label: kem}))} isMulti/>
-      </div>
-      }
       <div className="App-body">
-        <Plot xAccessor={(d:DataEntry):string=>d.kemName} yAccessors={[(d:DataEntry):number=>d.hsTimeMedian, (d:DataEntry):number=>d.hsTime95th]} data={useFilter? filteredData:data}></Plot>
+        <button onClick={()=>setShowSettings(!showSettings)}>{showSettings? "Hide Settings":"Show Settings"}</button>
+        {showSettings && 
+          <div style={{position: "absolute", width: "50vw", padding: "20px", backgroundColor: "#eee"}}>
+            <h4>Values</h4>
+              <Select value={selectedValueAccessors.map(a=>({value: a.label, label: a.label}))} onChange={handleValueAccessorChange} options={allAvailableValueAccessors.map(a=>({value: a.label, label: a.label}))} isMulti/>
+            <h4>SIGs</h4>
+              <Select value={selectedSigs.map(sig=>({value: sig, label: sig}))} onChange={handleSigFilterChange} options={allAvailableSigs.map(sig=>({value: sig, label: sig}))} isMulti/>
+            <h4>KEMs</h4>
+              <Select value={selectedKems.map(kem=>({value: kem, label: kem}))} onChange={handleKemFilterChange} options={allAvailableKems.map(kem=>({value: kem, label: kem}))} isMulti/>
+            <h4>Bar Spacing</h4>
+              <input style={{display: "block"}} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarSpacing(Number(e.target.value))} value={barSpacing} type="number"/>
+            <h4>Bar Group Spacing</h4>
+            <input style={{display: "block"}} value={barGroupSpacing} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarGroupSpacing(Number(e.target.value))} type="number"/>
+          </div>
+        }
+        <BarPlot 
+          title={"Openssh Speed Test Results"}
+          xAccessor={(d:DataEntry):string=>("( " + d.kemName+" ) ( "+d.sigName+" )")} 
+          yAccessors={selectedValueAccessors.map(a=>a.accessor)}
+          legend={selectedValueAccessors.map(({label, color, pattern})=>({label, color, pattern} as LegendItem))}
+          data={filteredData}
+          barSpacing={barSpacing}
+          barGroupSpacing={barGroupSpacing}
+        >
+        </BarPlot>
       </div>
   </div>
   );
