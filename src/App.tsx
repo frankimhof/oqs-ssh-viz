@@ -73,17 +73,6 @@ function App() {
   useEffect(()=>{
     setFilteredData(data.filter(d=>selectedSigs.includes(d.sigName) && selectedKems.includes(d.kemName)));
   }, [data, selectedKems, selectedSigs])
-  //  const handleShowSettings = () =>{
-  //    if(showSettings){
-  //      setSelectedKems(allAvailableKems);
-  //      setSelectedSigs(allAvailableSigs);
-  //    }
-  //    else{
-  //      setSelectedKems([]);
-  //      setSelectedSigs([]);
-  //    }
-  //    setShowSettings(!showSettings);
-  //  };
 
   const handleSigFilterChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
     setSelectedSigs(selectedOptions.map(d=>d.value))
@@ -104,9 +93,9 @@ function App() {
       <header className="App-header">
       </header>
       <div className="App-body">
-        <button onClick={()=>setShowSettings(!showSettings)}>{showSettings? "Hide Settings":"Show Settings"}</button>
+        <button style={{position: "absolute", margin: "10px", padding: "10px", backgroundColor: "#000", color: "white", borderRadius: "5px"}} onClick={()=>setShowSettings(!showSettings)}>{showSettings? "Hide Settings":"Show Settings"}</button>
         {showSettings && 
-          <div style={{position: "absolute", width: "50vw", padding: "20px", backgroundColor: "#eee"}}>
+          <div style={{position: "absolute", marginTop: "50px", width: "50vw", padding: "20px", backgroundColor: "#eee"}}>
             <h4>Values</h4>
               <Select value={selectedValueAccessors.map(a=>({value: a.label, label: a.label}))} onChange={handleValueAccessorChange} options={allAvailableValueAccessors.map(a=>({value: a.label, label: a.label}))} isMulti/>
             <h4>SIGs</h4>
@@ -120,7 +109,7 @@ function App() {
           </div>
         }
         <BarPlot 
-          title={"Openssh Speed Test Results"}
+          title={"oqs-ssh handshake time results"}
           xAccessor={(d:DataEntry):string=>("( " + d.kemName+" ) ( "+d.sigName+" )")} 
           yAccessors={selectedValueAccessors.map(a=>a.accessor)}
           legend={selectedValueAccessors.map(({label, color, pattern})=>({label, color, pattern} as LegendItem))}

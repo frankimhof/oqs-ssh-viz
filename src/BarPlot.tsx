@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as d3 from 'd3';
 import {PlotDimensions, DataEntry, LegendItem} from './customTypes';
 import Axes from './Axes';
 import GridLine from './GridLine';
 import Legend from './Legend';
+import Title from './Title';
 
 type Props = {
   title: string,
@@ -30,14 +31,15 @@ const createDimensions = (width:number, height: number, marginLeft: number, marg
   }
 }
 
+const legendFontSize=30;
+const titleFontSize=50;
 
 const BarPlot: React.FC<Props> = ({title, data, xAccessor, yAccessors, legend, yGridLine=true, barSpacing=1, barGroupSpacing=5}) =>{
-  const plotDimensions:PlotDimensions = createDimensions(1600, 900, 150, 10, legend.length*20+20, 400);
+  const plotDimensions:PlotDimensions = createDimensions(1600, 1400, 330, 10, (legend.length+1)*legendFontSize+titleFontSize, 900);
   const {width, height, boundedHeight, boundedWidth, marginTop, marginLeft} = plotDimensions;
   const entryWidth = boundedWidth/data.length;//The max width for each DataEntry. 
   const numberOfBarsPerGroup = yAccessors.length;
   const barWidth = (entryWidth-barGroupSpacing-(numberOfBarsPerGroup-1)*barSpacing)/numberOfBarsPerGroup;//split maxBarWidth evenly between the bars if there is more than one. 
-
   //get the extents of all data that will be shown and use the biggest to scale the entire visualization
   const accessorWithBiggestExtent = yAccessors.reduce((current, next) => ((d3.extent(data, next))[1] as number)>((d3.extent(data, current))[1] as number)? next:current, yAccessors[0])
   const yScale:d3.ScaleLinear<number, number> = d3
@@ -51,12 +53,10 @@ const BarPlot: React.FC<Props> = ({title, data, xAccessor, yAccessors, legend, y
   return(
     <div className="plot">
       <svg style={{backgroundColor: "#fff", borderRadius: "5px"}} width={width} height={height}>
-        <g transform={`translate(${marginLeft+0.5*boundedWidth}, ${marginTop*0.25})`}>
-          <text fontSize="25px" fontWeight="bold" textAnchor="middle" >{title}</text>
-        </g>
-        <Legend items={legend} plotDimensions={plotDimensions}/>
+        <Title titleFontSize={titleFontSize} plotDimensions={plotDimensions}>{title}</Title>
+        <Legend marginTop={titleFontSize+10} marginLeft={20} items={legend} plotDimensions={plotDimensions} legendFontSize={30}/>
         <g transform={`translate(${marginLeft}, ${marginTop})`}>
-          <Axes yScale={yScale} plotDimensions={plotDimensions} lineColor={"black"} yLabel={"[s]"}/>
+          <Axes yScale={yScale} plotDimensions={plotDimensions} lineColor={"black"} yLabel={"(s)"} yLabelFontSize={40} yTicksFontSize={30}/>
           {yGridLine && <GridLine axis="y" scale={yScale} plotDimensions={plotDimensions}/>}
           {data.map((d, index)=>{
             return(
@@ -79,7 +79,7 @@ const BarPlot: React.FC<Props> = ({title, data, xAccessor, yAccessors, legend, y
                   </>)
                   )}
                 </g>
-                <text style={{fill: "black", transformOrigin: "top left", transform: `translate(${entryWidth*0.5}px, ${boundedHeight+15}px) rotate(-60deg)`, fontSize: "16px", textAnchor: "end"}}>{xAccessor(d)}</text>
+                <text fontSize={30} textAnchor="end" dominantBaseline={"middle"} style={{fill: "black", transformOrigin: "top left", transform: `translate(${entryWidth*0.5}px, ${boundedHeight+10}px) rotate(-50deg)`, }}>{xAccessor(d)}</text>
               </g>
             )
           })}
