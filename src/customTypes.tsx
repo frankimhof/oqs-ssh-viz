@@ -1,12 +1,15 @@
 type DataEntry = {
-  sigName:string,
-  kemName:string,
-  hsTimeMedian:number,
-  kemTimeMedian:number,
-  authTimeMedian:number,
-  hsTime95th:number,
-  kemTime95th:number,
-  authTime95th:number,
+  rtt: number,
+  kemName: string,
+  sigName: string,
+  size1kb_median_ms: number,
+  size10kb_median_ms: number,
+  size100kb_median_ms: number,
+  size1000kb_median_ms: number,
+  size1kb_percent95_ms: number,
+  size10kb_percent95_ms: number,
+  size100kb_percent95_ms: number,
+  size1000kb_percent95_ms: number,
 }
 
 type TickType = {

@@ -15,43 +15,44 @@ function App() {
   const allAvailableKems = Array.from(new Set(data.map(d => d.kemName)))
   const allAvailableSigs = Array.from(new Set(data.map(d => d.sigName)))
   const [filteredData, setFilteredData] = useState<DataEntry[]>([]);
+  const [sortByKem, setSortByKem] = useState<boolean>(true);//if set to false, displayed names will be sorted by sigName
   const allAvailableValueAccessors = [
     {
-      label:"HandshakeTimeMedian",
-      accessor: (d:DataEntry)=>d.hsTimeMedian,
+      label:"1kb page size",
+      accessor: (d:DataEntry)=>d.size1kb_median_ms,
       color: "#648fff",
       pattern: ""
     },
     {
-      label:"HandshakeTime95thPercentile",
-      accessor: (d:DataEntry)=>d.hsTime95th,
+      label:"10kb page size",
+      accessor: (d:DataEntry)=>d.size10kb_median_ms,
       color: d3.rgb("#648fff").brighter(1).toString(),
       pattern: "diagonal-lines"
     },
     {
-      label:"AuthTimeMedian",
-      accessor: (d:DataEntry)=>d.authTimeMedian,
+      label:"100kb page size",
+      accessor: (d:DataEntry)=>d.size100kb_median_ms,
       color: "#dc267f",
       pattern: ""
     },
     {
-      label:"AuthTime95thPercentile",
-      accessor: (d:DataEntry)=>d.authTime95th,
+      label:"1000kb page size",
+      accessor: (d:DataEntry)=>d.size1000kb_median_ms,
       color: d3.rgb("#dc267f").brighter(2).toString(),
       pattern: "checkered"
     },
-    {
-      label:"KemTimeMedian",
-      accessor: (d:DataEntry)=>d.kemTimeMedian,
-      color: "#ffb002",
-      pattern: ""
-    },
-    {
-      label:"KemTime95thPercentile",
-      accessor: (d:DataEntry)=>d.kemTime95th,
-      color: d3.rgb("#ffb002").brighter(0.8).toString(),
-      pattern: "circles"
-    },
+//    {
+//      label:"1000kb median",
+//      accessor: (d:DataEntry)=>d.size100kb_median_ms,
+//      color: "#ffb002",
+//      pattern: ""
+//    },
+//    {
+//      label:"KemTime95thPercentile",
+//      accessor: (d:DataEntry)=>d.size1000kb_median_ms,
+//      color: d3.rgb("#ffb002").brighter(0.8).toString(),
+//      pattern: "circles"
+//    },
   ];
 
   const [selectedValueAccessors, setSelectedValueAccessors] = useState<{label: string, accessor: (d:DataEntry)=>number, color: string, pattern: string}[]>(allAvailableValueAccessors);
@@ -92,10 +93,11 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <div className="App-body">
-        <button style={{position: "absolute", margin: "10px", padding: "10px", backgroundColor: "#000", color: "white", borderRadius: "5px"}} onClick={()=>setShowSettings(!showSettings)}>{showSettings? "Hide Settings":"Show Settings"}</button>
+        <div onDoubleClick={()=>setShowSettings(!showSettings)} className="App-body">
         {showSettings && 
-          <div style={{position: "absolute", marginTop: "50px", width: "50vw", padding: "20px", backgroundColor: "#eee"}}>
+          <>
+          <div style={{position: "fixed", top: 0, left: 0, bottom: 0, right: 0, overflow: "auto", background: "rgba(0,0,0,0.9)"}}/>
+          <div style={{position: "absolute", padding: "20px", backgroundColor: "transparent"}}>
             <h4>Values</h4>
               <Select value={selectedValueAccessors.map(a=>({value: a.label, label: a.label}))} onChange={handleValueAccessorChange} options={allAvailableValueAccessors.map(a=>({value: a.label, label: a.label}))} isMulti/>
             <h4>SIGs</h4>
@@ -106,14 +108,20 @@ function App() {
               <input style={{display: "block"}} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarSpacing(Number(e.target.value))} value={barSpacing} type="number"/>
             <h4>Bar Group Spacing</h4>
             <input style={{display: "block"}} value={barGroupSpacing} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarGroupSpacing(Number(e.target.value))} type="number"/>
+            <h4>Sort by</h4>
+            <div style={{display: "flex", flexDirection: "row"}}>
+              <button onClick={()=>setSortByKem(!sortByKem)}>{sortByKem? "KEM name":"SIG name"}</button>
+            </div>
           </div>
+          </>
         }
         <BarPlot 
-          title={"oqs-ssh handshake time results"}
-          xAccessor={(d:DataEntry):string=>("( " + d.kemName+" ) ( "+d.sigName+" )")} 
+          title={"PQ-TLS: Median Web Page Retrieval Time"}
+          subtitle={`RTT: ${filteredData[0]? filteredData[0].rtt : "undefined"} ms`}
+          xAccessor={(d:DataEntry):string=>(d.kemName)} 
           yAccessors={selectedValueAccessors.map(a=>a.accessor)}
           legend={selectedValueAccessors.map(({label, color, pattern})=>({label, color, pattern} as LegendItem))}
-          data={filteredData}
+          data={sortByKem? filteredData.sort((a, b)=>a.kemName>b.kemName? 1:0) : filteredData.sort((a, b)=>a.sigName>b.sigName? 1:0)}//todo: nonmutating sort
           barSpacing={barSpacing}
           barGroupSpacing={barGroupSpacing}
         >

@@ -5,9 +5,11 @@ import Axes from './Axes';
 import GridLine from './GridLine';
 import Legend from './Legend';
 import Title from './Title';
+import Subtitle from './Subtitle';
 
 type Props = {
   title: string,
+  subtitle?: string,
   data: DataEntry[],
   xAccessor: (d:DataEntry)=>string,
   yAccessors: ((d:DataEntry)=>number)[],
@@ -34,8 +36,8 @@ const createDimensions = (width:number, height: number, marginLeft: number, marg
 const legendFontSize=30;
 const titleFontSize=50;
 
-const BarPlot: React.FC<Props> = ({title, data, xAccessor, yAccessors, legend, yGridLine=true, barSpacing=1, barGroupSpacing=5}) =>{
-  const plotDimensions:PlotDimensions = createDimensions(1600, 1500, 400, 10, (legend.length+1)*legendFontSize+titleFontSize, 900);
+const BarPlot: React.FC<Props> = ({title, subtitle, data, xAccessor, yAccessors, legend, yGridLine=true, barSpacing=1, barGroupSpacing=5}) =>{
+  const plotDimensions:PlotDimensions = createDimensions(1600, 1650, 400, 10, (legend.length+1)*legendFontSize+titleFontSize, 900);
   const {width, height, boundedHeight, boundedWidth, marginTop, marginLeft} = plotDimensions;
   const entryWidth = boundedWidth/data.length;//The max width for each DataEntry. 
   const numberOfBarsPerGroup = yAccessors.length;
@@ -54,9 +56,10 @@ const BarPlot: React.FC<Props> = ({title, data, xAccessor, yAccessors, legend, y
     <div className="plot">
       <svg style={{backgroundColor: "#fff", borderRadius: "5px"}} width={width} height={height}>
         <Title titleFontSize={titleFontSize} plotDimensions={plotDimensions}>{title}</Title>
+        {subtitle && <Subtitle plotDimensions={plotDimensions}>{subtitle}</Subtitle>}
         <Legend marginTop={titleFontSize+10} marginLeft={20} items={legend} plotDimensions={plotDimensions} legendFontSize={30}/>
         <g transform={`translate(${marginLeft}, ${marginTop})`}>
-          <Axes yScale={yScale} plotDimensions={plotDimensions} lineColor={"black"} yLabel={"handshake times (s)"} yLabelFontSize={40} yTicksFontSize={30}/>
+          <Axes yScale={yScale} plotDimensions={plotDimensions} lineColor={"black"} yLabel={"Median web page retrieval time (ms)"} yLabelFontSize={40} yTicksFontSize={30}/>
           {yGridLine && <GridLine axis="y" scale={yScale} plotDimensions={plotDimensions}/>}
           {data.map((d, index)=>{
             return(
