@@ -25,8 +25,9 @@ function App() {
     {
       label:"HandshakeTime95thPercentile",
       accessor: (d:DataEntry)=>d.hsTime95th,
-      color: d3.rgb("#648fff").brighter(1).toString(),
-      pattern: "diagonal-lines"
+      color: d3.rgb("#648fff").brighter(1).formatHex(),
+      pattern: ""
+      //pattern: "diagonal-lines"
     },
     {
       label:"AuthTimeMedian",
@@ -37,8 +38,9 @@ function App() {
     {
       label:"AuthTime95thPercentile",
       accessor: (d:DataEntry)=>d.authTime95th,
-      color: d3.rgb("#dc267f").brighter(2).toString(),
-      pattern: "checkered"
+      color: d3.rgb("#dc267f").brighter(2).formatHex(),
+      pattern: ""
+      //pattern: "checkered"
     },
     {
       label:"KemTimeMedian",
@@ -49,8 +51,10 @@ function App() {
     {
       label:"KemTime95thPercentile",
       accessor: (d:DataEntry)=>d.kemTime95th,
-      color: d3.rgb("#ffb002").brighter(0.8).toString(),
-      pattern: "circles"
+      //color: "#648fff",
+      color: d3.rgb("#ffb002").brighter(0.8).formatHex(),
+      pattern: ""
+      //pattern: "circles"
     },
   ];
 
@@ -92,10 +96,11 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <div className="App-body">
-        <button style={{position: "absolute", margin: "10px", padding: "10px", backgroundColor: "#000", color: "white", borderRadius: "5px"}} onClick={()=>setShowSettings(!showSettings)}>{showSettings? "Hide Settings":"Show Settings"}</button>
+        <div className="App-body">
         {showSettings && 
-          <div style={{position: "absolute", marginTop: "50px", width: "50vw", padding: "20px", backgroundColor: "#eee"}}>
+          <>
+          <div onDoubleClick={()=>setShowSettings(false)} style={{position: "fixed", top: 0, left: 0, bottom: 0, right: 0, overflow: "auto", background: "rgba(0,0,0,0.9)"}}/>
+          <div style={{width: "50vw", position: "absolute", padding: "20px", backgroundColor: "transparent"}}>
             <h4>Values</h4>
               <Select value={selectedValueAccessors.map(a=>({value: a.label, label: a.label}))} onChange={handleValueAccessorChange} options={allAvailableValueAccessors.map(a=>({value: a.label, label: a.label}))} isMulti/>
             <h4>SIGs</h4>
@@ -107,7 +112,9 @@ function App() {
             <h4>Bar Group Spacing</h4>
             <input style={{display: "block"}} value={barGroupSpacing} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarGroupSpacing(Number(e.target.value))} type="number"/>
           </div>
+          </>
         }
+        <div onDoubleClick={()=>setShowSettings(true)}>
         <BarPlot 
           title={"oqs-ssh handshake time results"}
           xAccessor={(d:DataEntry):string=>("( " + d.kemName+" ) ( "+d.sigName+" )")} 
@@ -118,6 +125,7 @@ function App() {
           barGroupSpacing={barGroupSpacing}
         >
         </BarPlot>
+        </div>
       </div>
   </div>
   );
