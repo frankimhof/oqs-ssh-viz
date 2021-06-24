@@ -15,7 +15,7 @@ function App() {
   const allAvailableKems = Array.from(new Set(data.map(d => d.kemName)))
   const allAvailableSigs = Array.from(new Set(data.map(d => d.sigName)))
   const [filteredData, setFilteredData] = useState<DataEntry[]>([]);
-  const allAvailableValueAccessors = [
+  const [allAvailableValueAccessors, setAllAvailableValueAccessors] = useState([
     {
       label:"Handshake Time Median",
       accessor: (d:DataEntry)=>d.hsTimeMedian,
@@ -56,9 +56,9 @@ function App() {
       pattern: ""
       //pattern: "circles"
     },
-  ];
+  ]);
 
-  const [selectedValueAccessors, setSelectedValueAccessors] = useState<{label: string, accessor: (d:DataEntry)=>number, color: string, pattern: string}[]>(allAvailableValueAccessors);
+  const [selectedValueAccessors, setSelectedValueAccessors] = useState<number[]>(Array.from(Array(allAvailableValueAccessors.length).keys()))
 
   useEffect(()=>{
     const fetchData = async () =>{
@@ -85,9 +85,8 @@ function App() {
   const handleKemFilterChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
     setSelectedKems(selectedOptions.map(d=>d.value))
   }
-  const handleValueAccessorChange = (selectedOptions:OptionsType<{ value: string; label: string; }>) =>{
-    const selectedLabels = selectedOptions.map(o=>o.label);
-    setSelectedValueAccessors(allAvailableValueAccessors.filter(d=>selectedLabels.includes(d.label)))
+  const handleValueAccessorChange = (selectedOptions:OptionsType<{ value: number; label: string; }>) =>{
+    setSelectedValueAccessors(selectedOptions.map(option=>option.value).sort())
   }
 
   
@@ -102,7 +101,7 @@ function App() {
           <div onDoubleClick={()=>setShowSettings(false)} style={{position: "fixed", top: 0, left: 0, bottom: 0, right: 0, overflow: "auto", background: "rgba(0,0,0,0.9)"}}/>
           <div style={{width: "50vw", position: "absolute", padding: "20px", backgroundColor: "transparent"}}>
             <h4>Values</h4>
-              <Select value={selectedValueAccessors.map(a=>({value: a.label, label: a.label}))} onChange={handleValueAccessorChange} options={allAvailableValueAccessors.map(a=>({value: a.label, label: a.label}))} isMulti/>
+              <Select value={selectedValueAccessors.map(index=>({value: index, label: allAvailableValueAccessors[index].label}))} onChange={handleValueAccessorChange} options={allAvailableValueAccessors.map((a, index)=>({value: index, label: a.label}))} isMulti/>
             <h4>SIGs</h4>
               <Select value={selectedSigs.map(sig=>({value: sig, label: sig}))} onChange={handleSigFilterChange} options={allAvailableSigs.map(sig=>({value: sig, label: sig}))} isMulti/>
             <h4>KEMs</h4>
@@ -112,7 +111,12 @@ function App() {
             <h4>Bar Group Spacing</h4>
             <input style={{display: "block"}} value={barGroupSpacing} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarGroupSpacing(Number(e.target.value))} type="number"/>
             <h4>Bar Colors</h4>
-              {selectedValueAccessors.map((a, index)=><input onInput={(e:React.ChangeEvent<HTMLInputElement>)=>setSelectedValueAccessors(selectedValueAccessors.map((v,i)=>i===index? Object.assign(v, {color: e.target.value}) : v ))} type="color" id={a.label} name={a.label} value={a.color.toString()}/>)}
+              {selectedValueAccessors.map(i=><input
+                onInput={(e:React.ChangeEvent<HTMLInputElement>)=>setAllAvailableValueAccessors(allAvailableValueAccessors.map((a,index)=>i===index? Object.assign(a, {color: e.target.value}): a))}
+                type="color"
+                id={i.toString()}
+                name="gugus"
+                value={allAvailableValueAccessors[i].color.toString()}/>)}
           </div>
           </>
         }
@@ -120,8 +124,11 @@ function App() {
         <BarPlot 
           title={"oqs-ssh handshake time results"}
           xAccessor={(d:DataEntry):string=>("( " + d.kemName+" ) ( "+d.sigName+" )")} 
-          yAccessors={selectedValueAccessors.map(a=>a.accessor)}
-          legend={selectedValueAccessors.map(({label, color, pattern})=>({label, color, pattern} as LegendItem))}
+          yAccessors={selectedValueAccessors.map(i=>allAvailableValueAccessors[i].accessor)}
+          legend={selectedValueAccessors.map(i=>{
+            const {label, color, pattern} = allAvailableValueAccessors[i]
+            return {label, color, pattern} as LegendItem
+          })}
           data={filteredData}
           barSpacing={barSpacing}
           barGroupSpacing={barGroupSpacing}
