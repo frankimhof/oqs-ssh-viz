@@ -1,6 +1,7 @@
 # visualization of oqs-ssh measurments
 This project is meant for visualizing the results obtained from running the benchmark scripts in [fhnw-ise-qcrypt/oqs-demos/openssh/benachmark](https://github.com/fhnw-ise-qcrypt/oqs-demos/tree/benchmark/openssh/benchmark).
 It will display the results in a bar plot, whose appearance is customizable by double clicking on it.
+![](images/screenshot1.png)
 
 # Prerequisites
 1. Run the benachmark scripts as described in [fhnw-ise-qcrypt/oqs-demos/openssh/benchmark](https://github.com/fhnw-ise-qcrypt/oqs-demos/tree/benchmark/openssh/benchmark) in order to obtain the results as .csv files. The files will be stored in the `oqs-demos/openssh/benchmark/measurements` folder.
