@@ -1,12 +1,41 @@
 # visualization of oqs-ssh measurments
+This project is meant for visualizing the results obtained from running the benchmark scripts in [fhnw-ise-qcrypt/oqs-demos/openssh/benachmark](https://github.com/fhnw-ise-qcrypt/oqs-demos/tree/benchmark/openssh/benchmark).
+It will display the results in a bar plot, whose appearance is customizable by double clicking on it.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Prerequisites
+1. Run the benachmark scripts as described in [fhnw-ise-qcrypt/oqs-demos/openssh/benchmark](https://github.com/fhnw-ise-qcrypt/oqs-demos/tree/benchmark/openssh/benchmark) in order to obtain the results as .csv files. The files will be stored in the `oqs-demos/openssh/benchmark/measurements` folder.
+2. Install [node.js](https://nodejs.org/en/download/)
 
-## Available Scripts
+# Installation
+Change into `/oqs-demos/openssh/benchmark` directory and run the following command to download the visualization software.
+```
+git clone --depth 1 --branch main https://github.com/frankimhof/oqs-ssh-viz.git
+```
 
-In the project directory, you can run:
+# Usage
+1. Change into `/oqs-ssh-viz` and run the `visualize.sh` script to visualize the test results
 
-### `npm start`
+```
+./visualize.sh
+```
+2. The script will prompt to select which of the measurements should be visualized (in case the benchmark script was run multiple times). Select by entering the corresponding number and hit enter.
+3. If successfull, the script will start a server on [http://localhost:5000](http://localhost:5000) where the bar plot is displayed.
+4. Customize the bar plot by double clicking on it and selecting from options.
+
+# Development
+If you wish to further develop the bar plot, you are welcome to do so. The bar plot was built using [react.js](https://reactjs.org/) and [d3.js](https://d3js.org/). Therefore, after having installed the dependencies, you can utilize the available react scripts to run and build your changes.
+
+## Install dependencies
+Assuming current working directory is `/oqs-demos/openssh/benchmark/oqs-ssh-viz`
+
+```
+npm install
+```
+
+## Starting development server
+```
+npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -14,28 +43,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Building
+```
+npm run build
+```
+Builds the app for production to the `build` folder, which is the folder that is being served when running ```visualize.sh```.
