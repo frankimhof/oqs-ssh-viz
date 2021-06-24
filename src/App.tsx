@@ -17,39 +17,39 @@ function App() {
   const [filteredData, setFilteredData] = useState<DataEntry[]>([]);
   const allAvailableValueAccessors = [
     {
-      label:"HandshakeTimeMedian",
+      label:"Handshake Time Median",
       accessor: (d:DataEntry)=>d.hsTimeMedian,
       color: "#648fff",
       pattern: ""
     },
     {
-      label:"HandshakeTime95thPercentile",
+      label:"Handshake Time 95th Percentile",
       accessor: (d:DataEntry)=>d.hsTime95th,
       color: d3.rgb("#648fff").brighter(1).formatHex(),
       pattern: ""
       //pattern: "diagonal-lines"
     },
     {
-      label:"AuthTimeMedian",
+      label:"Client Auth Time Median",
       accessor: (d:DataEntry)=>d.authTimeMedian,
       color: "#dc267f",
       pattern: ""
     },
     {
-      label:"AuthTime95thPercentile",
+      label:"Client Auth Time 95th Percentile",
       accessor: (d:DataEntry)=>d.authTime95th,
       color: d3.rgb("#dc267f").brighter(2).formatHex(),
       pattern: ""
       //pattern: "checkered"
     },
     {
-      label:"KemTimeMedian",
+      label:"Kem Time Median",
       accessor: (d:DataEntry)=>d.kemTimeMedian,
       color: "#ffb002",
       pattern: ""
     },
     {
-      label:"KemTime95thPercentile",
+      label:"Kem Time 95th Percentile",
       accessor: (d:DataEntry)=>d.kemTime95th,
       //color: "#648fff",
       color: d3.rgb("#ffb002").brighter(0.8).formatHex(),
@@ -111,6 +111,8 @@ function App() {
               <input style={{display: "block"}} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarSpacing(Number(e.target.value))} value={barSpacing} type="number"/>
             <h4>Bar Group Spacing</h4>
             <input style={{display: "block"}} value={barGroupSpacing} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setBarGroupSpacing(Number(e.target.value))} type="number"/>
+            <h4>Bar Colors</h4>
+              {selectedValueAccessors.map((a, index)=><input onInput={(e:React.ChangeEvent<HTMLInputElement>)=>setSelectedValueAccessors(selectedValueAccessors.map((v,i)=>i===index? Object.assign(v, {color: e.target.value}) : v ))} type="color" id={a.label} name={a.label} value={a.color.toString()}/>)}
           </div>
           </>
         }
