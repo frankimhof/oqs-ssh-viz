@@ -26,8 +26,8 @@ function App() {
       label:"Handshake Time 95th Percentile",
       accessor: (d:DataEntry)=>d.hsTime95th,
       color: d3.rgb("#648fff").brighter(1).formatHex(),
-      pattern: ""
-      //pattern: "diagonal-lines"
+      //pattern: ""
+      pattern: "diagonal-lines"
     },
     {
       label:"Client Auth Time Median",
@@ -39,8 +39,8 @@ function App() {
       label:"Client Auth Time 95th Percentile",
       accessor: (d:DataEntry)=>d.authTime95th,
       color: d3.rgb("#dc267f").brighter(2).formatHex(),
-      pattern: ""
-      //pattern: "checkered"
+      //pattern: ""
+      pattern: "checkered"
     },
     {
       label:"Kem Time Median",
@@ -53,8 +53,8 @@ function App() {
       accessor: (d:DataEntry)=>d.kemTime95th,
       //color: "#648fff",
       color: d3.rgb("#ffb002").brighter(0.8).formatHex(),
-      pattern: ""
-      //pattern: "circles"
+      //pattern: ""
+      pattern: "circles"
     },
   ]);
 
