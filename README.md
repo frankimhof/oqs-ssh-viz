@@ -9,13 +9,26 @@ The files will be stored in the `oqs-demos/openssh/benchmark/measurements` folde
 2. Install [node.js](https://nodejs.org/en/download/)
 
 # Installation
-Change into `/oqs-demos/openssh/benchmark` directory and run the following command to download the visualization software.
+1. Change into `/oqs-demos/openssh/benchmark` directory and run the following command to download the visualization software.
 ```
 git clone --depth 1 --branch main https://github.com/frankimhof/oqs-ssh-viz.git
 ```
+2. Change into the `oqs-ssh-viz` directory
+```
+cd oqs-ssh-viz
+```
+3. Install all dependencies
+```
+npm install
+```
+4. Build the react app
+```
+npm run build
+```
 
 # Usage
-1. Change into `/oqs-ssh-viz` and run the `visualize.sh` script to visualize the test results
+Assuming current working directory is `/oqs-demos/openssh/benchmark/oqs-ssh-viz`
+1. run the `visualize.sh` script to visualize the test results
 
 ```
 ./visualize.sh
